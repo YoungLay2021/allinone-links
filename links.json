@@ -1,0 +1,18 @@
+{
+  "last_updated": "2026-09-22",
+  "main_channel": {
+    "label": "📢 Main Channel",
+    "username": "@allinonech01",
+    "url": "https://t.me/allinonech01"
+  },
+  "backup_channel": {
+    "label": "🆘 Backup Channel",
+    "username": "@allinonech02",
+    "url": "https://t.me/allinonech02"
+  },
+  "bot": {
+    "label": "🤖 Bot",
+    "username": "@All_In_One_movie_channel_bot",
+    "url": "https://t.me/All_In_One_movie_channel_bot"
+  }
+}
