@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>All In One Movie Channel — Links</title>
+<title>Website Link</title>
 <style>
   :root {
     --bg: #0f172a;
@@ -12,6 +12,8 @@
     --muted: #94a3b8;
     --accent: #3b82f6;
     --accent-hover: #2563eb;
+    --warn-bg: #422006;
+    --warn-text: #fbbf24;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
@@ -27,7 +29,8 @@
   .wrap { max-width: 480px; width: 100%; }
   .logo { font-size: 48px; text-align: center; margin-bottom: 12px; }
   h1 { font-size: 22px; text-align: center; margin-bottom: 4px; }
-  .subtitle { text-align: center; color: var(--muted); font-size: 14px; margin-bottom: 28px; }
+  .subtitle { text-align: center; color: var(--muted); font-size: 14px; margin-bottom: 20px; }
+  #cards { min-height: 180px; }
   .card {
     background: var(--card);
     border-radius: 14px;
@@ -53,39 +56,54 @@
   }
   .card a:active { background: var(--accent-hover); }
   .updated { text-align: center; color: var(--muted); font-size: 12px; margin-top: 20px; }
+  .warn {
+    background: var(--warn-bg);
+    color: var(--warn-text);
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 13px;
+    text-align: center;
+    margin-bottom: 14px;
+  }
 </style>
 </head>
 <body>
   <div class="wrap">
     <div class="logo">🎬</div>
-    <h1>All In One Movie Channel</h1>
+    <h1>Website Link</h1>
     <p class="subtitle">လက်ရှိ အလုပ်လုပ်နေသော Link များ — Bookmark လုပ်ထားပါ</p>
-
-    <div class="card">
-      <div>
-        <div class="label">📢 Main Channel</div>
-        <div class="desc">@allinonech01</div>
-      </div>
-      <a href="https://t.me/allinonech01" target="_blank">ဝင်ရန်</a>
+    <div id="cards">
+      <div class="warn">Loading...</div>
     </div>
-
-    <div class="card">
-      <div>
-        <div class="label">🆘 Backup Channel</div>
-        <div class="desc">@allinonech02</div>
-      </div>
-      <a href="https://t.me/allinonech02" target="_blank">ဝင်ရန်</a>
-    </div>
-
-    <div class="card">
-      <div>
-        <div class="label">🤖 Bot</div>
-        <div class="desc">@All_In_One_movie_channel_bot</div>
-      </div>
-      <a href="https://t.me/All_In_One_movie_channel_bot" target="_blank">စတင်ရန်</a>
-    </div>
-
-    <p class="updated">Main Channel/Bot ပိတ်ခံရရင်တောင် ဒီ Page ကို ပြန်ဖွင့်ရင် Backup Link အသစ်ကို အမြဲ တွေ့ရပါလိမ့်မယ်။</p>
+    <p class="updated" id="updatedNote"></p>
   </div>
+
+  <script>
+    fetch('links.json?_=' + Date.now())
+      .then(r => r.json())
+      .then(data => {
+        const order = ['main_channel', 'backup_channel', 'bot'];
+        const cardsHtml = order.map(key => {
+          const item = data[key];
+          if (!item) return '';
+          const actionWord = key === 'bot' ? 'စတင်ရန်' : 'ဝင်ရန်';
+          return `
+            <div class="card">
+              <div>
+                <div class="label">${item.label}</div>
+                <div class="desc">${item.username}</div>
+              </div>
+              <a href="${item.url}" target="_blank">${actionWord}</a>
+            </div>`;
+        }).join('');
+        document.getElementById('cards').innerHTML = cardsHtml;
+        document.getElementById('updatedNote').textContent =
+          `Main Channel/Bot ပိတ်ခံရရင်တောင် ဒီ Page ကို ပြန်ဖွင့်ရင် Backup Link အသစ်ကို အမြဲ တွေ့ရပါလိမ့်မယ်။ (Last updated: ${data.last_updated || '-'})`;
+      })
+      .catch(() => {
+        document.getElementById('cards').innerHTML =
+          '<div class="warn">⚠️ Link data ကို Load လုပ်၍ မရပါ — Internet Connection စစ်ပြီး ပြန်ဖွင့်ကြည့်ပါ။</div>';
+      });
+  </script>
 </body>
 </html>
